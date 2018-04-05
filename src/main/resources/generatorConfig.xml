@@ -5,19 +5,20 @@
 
 <generatorConfiguration>
     <classPathEntry
-            location="C:\Users\59278\.m2\repository\mysql\mysql-connector-java\6.0.6\mysql-connector-java-6.0.6.jar"/>
+            location="C:\Users\59278\.m2\repository\mysql\mysql-connector-java\5.1.38\mysql-connector-java-5.1.38.jar"/>
 
     <context id="DB2Tables" targetRuntime="MyBatis3">
+        <plugin type="org.mybatis.generator.plugins.RowBoundsPlugin"></plugin>
         <commentGenerator>
             <property name="javaFileEncoding" value="UTF-8"/>
             <property name="javaFormatter" value="org.mybatis.generator.api.dom.DefaultJavaFormatter"/>
             <property name="suppressDate" value="true"/>
             <property name="suppressAllComments" value="true"/>
         </commentGenerator>
-        <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
-                        connectionURL="jdbc:mysql://localhost:3306/meeting"
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://66.112.221.83:3306/meeting"
                         userId="root"
-                        password="Woaiqq3guo">
+                        password="my.dhu.edu.cn">
         </jdbcConnection>
 
         <javaTypeResolver>
@@ -37,8 +38,14 @@
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>
 
-        <table tableName="Turing"></table>
-        <table tableName="news"></table>
-        <table tableName="institute"></table>
+        <!--<table tableName="user">-->
+        <!--<property name="useActualColumnNames" value="true"/>-->
+        <!--</table>-->
+        <table tableName="apply_learning">
+            <property name="useActualColumnNames" value="true"/>
+        </table>
+        <table tableName="order_room">
+            <property name="useActualColumnNames" value="true"/>
+        </table>
     </context>
 </generatorConfiguration>

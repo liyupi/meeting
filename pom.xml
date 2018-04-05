@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>groupId</groupId>
-    <artifactId>idove</artifactId>
+    <artifactId>meeting</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
@@ -100,11 +100,18 @@
             <version>${mybatis.spring.version}</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.mybatis.generator/mybatis-generator-core -->
+        <dependency>
+            <groupId>org.mybatis.generator</groupId>
+            <artifactId>mybatis-generator-core</artifactId>
+            <version>1.3.5</version>
+        </dependency>
+
         <!-- 导入Mysql数据库链接jar包 -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>6.0.6</version>
+            <version>5.1.38</version>
         </dependency>
 
         <!-- 日志文件管理包 -->
@@ -165,11 +172,6 @@
             <scope>provided</scope>
         </dependency>
 
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus</artifactId>
-            <version>2.2.0</version>
-        </dependency>
     </dependencies>
 
     <build>
