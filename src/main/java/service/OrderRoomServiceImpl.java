@@ -2,64 +2,57 @@ package service;
 
 import entity.OrderRoom;
 import entity.OrderRoomExample;
+
+import java.util.List;
+
 import mapper.OrderRoomMapper;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
-/**
- * @Author: Yupi Li
- * @Date: Created in 15:03 2018/4/4
- * @Description:
- * @Modified By:
- */
+@Transactional
 @Service
-public class OrderRoomServiceImpl implements OrderRoomService {
+public class OrderRoomServiceImpl
+        implements OrderRoomService {
     @Autowired
-    OrderRoomMapper OrderRoomMapper;
+    OrderRoomMapper orderRoomMapper;
 
-    @Override
     public void insertOrderRoom(OrderRoom orderRoom) {
-        OrderRoomMapper.insertSelective(orderRoom);
+        orderRoomMapper.insertSelective(orderRoom);
     }
 
-    @Override
     public void deleteOrderRoom(int id) {
-        OrderRoomMapper.deleteByPrimaryKey(id);
+        orderRoomMapper.deleteByPrimaryKey(id);
     }
 
-    @Override
     public void updateOrderRoom(OrderRoom orderRoom) {
-        OrderRoomMapper.updateByPrimaryKeySelective(orderRoom);
+        orderRoomMapper.updateByPrimaryKeySelective(orderRoom);
     }
 
-    @Override
     public long getOrderRoomCount(int orderStatus) {
-        OrderRoomExample OrderRoomExample = new OrderRoomExample();
-        OrderRoomExample.createCriteria().andOrderStatusEqualTo(orderStatus);
-        return OrderRoomMapper.countByExample(OrderRoomExample);
+        OrderRoomExample orderRoomExample = new OrderRoomExample();
+        orderRoomExample.createCriteria().andOrderStatusEqualTo(orderStatus);
+        return orderRoomMapper.countByExample(orderRoomExample);
     }
 
-    @Override
     public long getOrderRoomCountAll() {
-        OrderRoomExample OrderRoomExample = new OrderRoomExample();
-        return OrderRoomMapper.countByExample(OrderRoomExample);
+        OrderRoomExample orderRoomExample = new OrderRoomExample();
+        return orderRoomMapper.countByExample(orderRoomExample);
     }
 
-    @Override
     public List<OrderRoom> getOrderRoomByPage(int page, int limit, int orderStatus) {
-        OrderRoomExample OrderRoomExample = new OrderRoomExample();
-        OrderRoomExample.createCriteria().andOrderStatusEqualTo(orderStatus);
+        OrderRoomExample orderRoomExample = new OrderRoomExample();
+        orderRoomExample.setOrderByClause("orderDate asc");
+        orderRoomExample.createCriteria().andOrderStatusEqualTo(orderStatus);
         RowBounds rowBounds = new RowBounds((page - 1) * limit, limit);
-        return OrderRoomMapper.selectByExampleWithRowbounds(OrderRoomExample, rowBounds);
+        return orderRoomMapper.selectByExampleWithRowbounds(orderRoomExample, rowBounds);
     }
 
-    @Override
     public List<OrderRoom> getOrderRoomByPageAll(int page, int limit) {
-        OrderRoomExample OrderRoomExample = new OrderRoomExample();
+        OrderRoomExample orderRoomExample = new OrderRoomExample();
+        orderRoomExample.setOrderByClause("orderDate asc");
         RowBounds rowBounds = new RowBounds((page - 1) * limit, limit);
-        return OrderRoomMapper.selectByExampleWithRowbounds(OrderRoomExample, rowBounds);
+        return orderRoomMapper.selectByExampleWithRowbounds(orderRoomExample, rowBounds);
     }
 }

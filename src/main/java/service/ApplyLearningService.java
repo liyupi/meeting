@@ -4,12 +4,6 @@ import entity.ApplyLearning;
 
 import java.util.List;
 
-/**
- * @Author: Yupi Li
- * @Date: Created in 15:00 2018/4/4
- * @Description:
- * @Modified By:
- */
 public interface ApplyLearningService {
     void insertApplyLearning(ApplyLearning applyLearning);
 

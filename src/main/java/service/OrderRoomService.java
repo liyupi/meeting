@@ -4,12 +4,6 @@ import entity.OrderRoom;
 
 import java.util.List;
 
-/**
- * @Author: Yupi Li
- * @Date: Created in 15:02 2018/4/4
- * @Description:
- * @Modified By:
- */
 public interface OrderRoomService {
     void insertOrderRoom(OrderRoom orderRoom);
 

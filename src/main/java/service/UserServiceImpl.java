@@ -2,70 +2,71 @@ package service;
 
 import entity.User;
 import entity.UserExample;
+import entity.UserExample.Criteria;
+
+import java.util.List;
+
 import mapper.UserMapper;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 
-/**
- * @Author: Yupi Li
- * @Date: Created in 22:49 2018/4/2
- * @Description:
- * @Modified By:
- */
 @Transactional
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
     UserMapper userMapper;
 
-    @Override
     public void insertUser(User user) {
         userMapper.insert(user);
     }
 
-    @Override
     public void deleteUser(int id) {
-        userMapper.deleteByPrimaryKey(id);
+        userMapper.deleteByPrimaryKey(Integer.valueOf(id));
     }
 
-    @Override
     public void updateUser(User user) {
         userMapper.updateByPrimaryKeySelective(user);
     }
 
-    @Override
     public User getUserById(int id) {
-        return userMapper.selectByPrimaryKey(id);
+        return userMapper.selectByPrimaryKey(Integer.valueOf(id));
     }
 
-    @Override
     public User getUserByIdAndPassword(int id, String password) {
         UserExample userExample = new UserExample();
-        userExample.createCriteria().andUserIdEqualTo(id).andUserPasswordEqualTo(password);
+        userExample.createCriteria().andUserIdEqualTo(Integer.valueOf(id)).andUserPasswordEqualTo(password);
         List<User> userList = userMapper.selectByExample(userExample);
         if (userList.size() > 0) {
             return userList.get(0);
-        } else {
-            return null;
         }
+        return null;
     }
 
-    @Override
-    public long getUserRegisterCount() {
+    public long getUserRegisterCount(int userStatus) {
         UserExample userExample = new UserExample();
-        userExample.createCriteria().andUserStatusEqualTo(0);
+        userExample.createCriteria().andUserStatusEqualTo(userStatus);
         return userMapper.countByExample(userExample);
     }
 
-    @Override
-    public List<User> getUserRegisterInfoByPage(int page, int limit) {
+    public long getUserRegisterCountAll() {
         UserExample userExample = new UserExample();
-        userExample.createCriteria().andUserStatusEqualTo(0);
-        userExample.setOrderByClause("userRegisterDate desc");
+        return userMapper.countByExample(userExample);
+    }
+
+    public List<User> getUserRegisterInfoByPage(int page, int limit, int userStatus) {
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andUserStatusEqualTo(userStatus);
+        userExample.setOrderByClause("userRegisterDate asc");
+        RowBounds rowBounds = new RowBounds((page - 1) * limit, limit);
+        return userMapper.selectByExampleWithRowbounds(userExample, rowBounds);
+    }
+
+    public List<User> getUserRegisterInfoByPageAll(int page, int limit) {
+        UserExample userExample = new UserExample();
+        userExample.setOrderByClause("userRegisterDate asc");
         RowBounds rowBounds = new RowBounds((page - 1) * limit, limit);
         return userMapper.selectByExampleWithRowbounds(userExample, rowBounds);
     }

@@ -1,6 +1,14 @@
 package controller;
 
 import entity.OrderRoom;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -8,17 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import service.OrderRoomService;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-/**
- * @Author: Yupi Li
- * @Date: Created in 14:59 2018/4/4
- * @Description:
- * @Modified By:
- */
 @Controller
 @CrossOrigin
 public class OrderRoomController {
@@ -27,9 +25,14 @@ public class OrderRoomController {
 
     @RequestMapping("/addOrderRoom")
     @ResponseBody
-    public Map<String, Object> insertOrderRoom(OrderRoom orderRoom) {
+    public Map<String, Object> insertOrderRoom(OrderRoom orderRoom, String dateRange, String timeRange) {
         Map<String, Object> map = new HashMap<>();
         try {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            Date startTime = dateFormat.parse(dateRange + " " + timeRange.substring(0, timeRange.indexOf('~') - 1));
+            Date endTime = dateFormat.parse(dateRange + " " + timeRange.substring(timeRange.indexOf('~') + 2));
+            orderRoom.setStartTime(startTime);
+            orderRoom.setEndTime(endTime);
             orderRoom.setOrderStatus(0);
             orderRoom.setOrderDate(new Date());
             orderRoomService.insertOrderRoom(orderRoom);
@@ -46,6 +49,7 @@ public class OrderRoomController {
         Map<String, Object> map = new HashMap<>();
         try {
             long count = orderRoomService.getOrderRoomCount(orderStatus);
+            map.put("count", count);
             if (count > 0) {
                 List<OrderRoom> orderRoomList = orderRoomService.getOrderRoomByPage(page, limit, orderStatus);
                 if (orderRoomList.size() > 0) {
@@ -71,6 +75,7 @@ public class OrderRoomController {
         Map<String, Object> map = new HashMap<>();
         try {
             long count = orderRoomService.getOrderRoomCountAll();
+            map.put("count", count);
             if (count > 0) {
                 List<OrderRoom> orderRoomList = orderRoomService.getOrderRoomByPageAll(page, limit);
                 if (orderRoomList.size() > 0) {
@@ -116,4 +121,3 @@ public class OrderRoomController {
         return map;
     }
 }
-

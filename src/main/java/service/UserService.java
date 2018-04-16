@@ -4,24 +4,22 @@ import entity.User;
 
 import java.util.List;
 
-/**
- * @Author: Yupi Li
- * @Date: Created in 22:48 2018/4/2
- * @Description:
- * @Modified By:
- */
 public interface UserService {
     void insertUser(User user);
 
-    void deleteUser(int id);
+    void deleteUser(int userId);
 
     void updateUser(User user);
 
-    User getUserById(int id);
+    User getUserById(int userId);
 
-    User getUserByIdAndPassword(int id, String password);
+    User getUserByIdAndPassword(int userId, String password);
 
-    long getUserRegisterCount();
+    long getUserRegisterCount(int userStatus);
 
-    List<User> getUserRegisterInfoByPage(int page, int limit);
+    long getUserRegisterCountAll();
+
+    List<User> getUserRegisterInfoByPage(int page, int limit, int userStatus);
+
+    List<User> getUserRegisterInfoByPageAll(int page, int limit);
 }

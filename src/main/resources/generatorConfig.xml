@@ -5,7 +5,7 @@
 
 <generatorConfiguration>
     <classPathEntry
-            location="C:\Users\59278\.m2\repository\mysql\mysql-connector-java\5.1.38\mysql-connector-java-5.1.38.jar"/>
+            location="C:\Users\李鱼皮\.m2\repository\mysql\mysql-connector-java\5.1.38\mysql-connector-java-5.1.38.jar"/>
 
     <context id="DB2Tables" targetRuntime="MyBatis3">
         <plugin type="org.mybatis.generator.plugins.RowBoundsPlugin"></plugin>
@@ -41,10 +41,16 @@
         <!--<table tableName="user">-->
         <!--<property name="useActualColumnNames" value="true"/>-->
         <!--</table>-->
-        <table tableName="apply_learning">
+        <!--<table tableName="apply_learning">-->
+            <!--<property name="useActualColumnNames" value="true"/>-->
+        <!--</table>-->
+        <!--<table tableName="order_room">-->
+            <!--<property name="useActualColumnNames" value="true"/>-->
+        <!--</table>-->
+        <table tableName="apply_topic">
             <property name="useActualColumnNames" value="true"/>
         </table>
-        <table tableName="order_room">
+        <table tableName="apply_research">
             <property name="useActualColumnNames" value="true"/>
         </table>
     </context>

@@ -1,31 +1,28 @@
 package controller;
 
 import entity.User;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import redis.clients.jedis.Jedis;
 import service.UserService;
 
-import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-/**
- * @Author: Yupi Li
- * @Date: Created in 22:48 2018/4/2
- * @Description:
- * @Modified By:
- */
 
 @Controller
 @CrossOrigin
 public class UserController {
     @Autowired
     UserService userService;
+    private Jedis jedis = new Jedis("127.0.0.1", 6379);
 
     @RequestMapping("/userLogin")
     @ResponseBody
@@ -36,19 +33,49 @@ public class UserController {
             if (user != null) {
                 User user1 = userService.getUserByIdAndPassword(userId, userPassword);
                 if (user1 != null) {
-                    if (user1.getUserStatus() != 0) {
-                        map.put("code", 0);//成功
+                    if (user1.getUserStatus() == 1 || user1.getUserStatus() == 3) {
+                        Map<String, String> jedisMap = new HashMap<>();
+                        String token = UUID.randomUUID().toString().replace("-", "");
+                        jedisMap.put("userId", String.valueOf(user1.getUserId()));
+                        jedis.hmset(token, jedisMap);
+                        jedis.expire(token, 5400);
+                        map.put("code", 0);
+                        map.put("token", token);
+                        if (user1.getUserStatus() == 3) {
+                            map.put("admin", true);
+                        }
                     } else {
-                        map.put("code", 4);//未通过审核
+                        map.put("code", 4);
                     }
                 } else {
-                    map.put("code", 1);//密码错误
+                    map.put("code", 1);
                 }
             } else {
-                map.put("code", 2);//未注册
+                map.put("code", 2);
             }
         } catch (Exception e) {
-            map.put("code", 3);//异常
+            map.put("code", 3);
+        }
+        return map;
+    }
+
+    @RequestMapping("/userLogout")
+    @ResponseBody
+    public Map<String, Object> userLogout(int userId, String token) {
+        Map<String, Object> map = new HashMap<>();
+        try {
+            if (jedis.exists(token)) {
+                if (jedis.hmget(token, "userId").get(0).equals(String.valueOf(userId))) {
+                    jedis.del(token);
+                    map.put("code", 0);
+                } else {
+                    map.put("code", 2);
+                }
+            } else {
+                map.put("code", 2);
+            }
+        } catch (Exception e) {
+            map.put("code", 3);
         }
         return map;
     }
@@ -59,28 +86,28 @@ public class UserController {
         Map<String, Object> map = new HashMap<>();
         try {
             if (userService.getUserById(user.getUserId()) == null) {
-                user.setUserStatus(0);//初始状态值
-                user.setUserRegisterDate(new Date());//注册日期
+                user.setUserStatus(0);
+                user.setUserRegisterDate(new Date());
                 userService.insertUser(user);
-                map.put("code", 0);//成功
+                map.put("code", 0);
             } else {
-                map.put("code", 2);//已注册
+                map.put("code", 2);
             }
         } catch (Exception e) {
-            map.put("code", 3);//异常
+            map.put("code", 3);
         }
         return map;
     }
 
     @RequestMapping("/userGetRegisterInfoByPage")
     @ResponseBody
-    public Map<String, Object> userGetRegisterInfoByPage(int page, int limit) {
+    public Map<String, Object> userGetRegisterInfoByPage(int page, int limit, int userStatus) {
         Map<String, Object> map = new HashMap<>();
         try {
-            long count = userService.getUserRegisterCount();
+            long count = userService.getUserRegisterCount(userStatus);
             map.put("count", count);
             if (count != 0) {
-                List<User> userList = userService.getUserRegisterInfoByPage(page, limit);
+                List<User> userList = userService.getUserRegisterInfoByPage(page, limit, userStatus);
                 if (userList.size() > 0) {
                     map.put("code", 0);
                     map.put("data", userList);
@@ -116,7 +143,7 @@ public class UserController {
     public Map<String, Object> userUpdate(User user) {
         Map<String, Object> map = new HashMap<>();
         try {
-            userService.updateUser(user);
+            this.userService.updateUser(user);
             map.put("code", 0);
         } catch (Exception e) {
             map.put("code", 3);
