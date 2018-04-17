@@ -6,9 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import service.ApplyTopicService;
 
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -117,6 +123,22 @@ public class ApplyTopicController {
             applyTopicService.updateApplyTopic(applyTopic);
             map.put("code", 0);
         } catch (Exception e) {
+            map.put("code", 3);
+        }
+        return map;
+    }
+
+    @RequestMapping("/uploadFileApplyTopic")
+    @ResponseBody
+    public Map<String, Object> uploadFileApplyTopic(HttpServletRequest request, @RequestParam("file") CommonsMultipartFile file) {
+        Map<String, Object> map = new HashMap<>();
+        String path = new File(System.getProperty("user.dir")).getParent() + "/webapps/meeting_files/" + file.getOriginalFilename();
+        File newFile = new File(path);
+        try {
+            file.transferTo(newFile);
+            map.put("code", 0);
+            map.put("src", request.getLocalAddr() + ":" + request.getLocalPort() + "/meeting_files/" + file.getOriginalFilename());
+        } catch (IOException e) {
             map.put("code", 3);
         }
         return map;
