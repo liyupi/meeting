@@ -38,20 +38,20 @@
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>
 
-        <!--<table tableName="user">-->
-        <!--<property name="useActualColumnNames" value="true"/>-->
-        <!--</table>-->
+        <table tableName="user">
+        <property name="useActualColumnNames" value="true"/>
+        </table>
         <!--<table tableName="apply_learning">-->
             <!--<property name="useActualColumnNames" value="true"/>-->
         <!--</table>-->
         <!--<table tableName="order_room">-->
             <!--<property name="useActualColumnNames" value="true"/>-->
         <!--</table>-->
-        <table tableName="apply_topic">
-            <property name="useActualColumnNames" value="true"/>
-        </table>
-        <table tableName="apply_research">
-            <property name="useActualColumnNames" value="true"/>
-        </table>
+        <!--<table tableName="apply_topic">-->
+            <!--<property name="useActualColumnNames" value="true"/>-->
+        <!--</table>-->
+        <!--<table tableName="apply_research">-->
+            <!--<property name="useActualColumnNames" value="true"/>-->
+        <!--</table>-->
     </context>
 </generatorConfiguration>

@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -31,12 +32,12 @@ public class ApplyTopicController {
 
     @RequestMapping("/addApplyTopic")
     @ResponseBody
-    public Map<String, Object> insertApplyTopic(ApplyTopicWithBLOBs applyTopic, String dateRange, String timeRange) {
+    public Map<String, Object> insertApplyTopic(ApplyTopicWithBLOBs applyTopic, String duration) {
         Map<String, Object> map = new HashMap<>();
         try {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-            Date startDate = dateFormat.parse(dateRange + " " + timeRange.substring(0, timeRange.indexOf('~') - 1));
-            Date endDate = dateFormat.parse(dateRange + " " + timeRange.substring(timeRange.indexOf('~') + 2));
+            Date startDate = dateFormat.parse(duration.substring(0, duration.indexOf('~') - 1)+"-01 00:00:00");
+            Date endDate = dateFormat.parse(duration.substring(duration.indexOf('~') + 2)+"-01 00:00:00");
             applyTopic.setStartDate(startDate);
             applyTopic.setEndDate(endDate);
             applyTopic.setApplyStatus(0);
@@ -64,11 +65,11 @@ public class ApplyTopicController {
                     map.put("data", applyTopicList);
                 } else {
                     map.put("code", 4);
-                    map.put("msg", "暂无课题申请");
+                    map.put("msg", "暂无课题");
                 }
             } else {
                 map.put("code", 4);
-                map.put("msg", "暂无课题申请");
+                map.put("msg", "暂无课题");
             }
         } catch (Exception e) {
             map.put("code", 3);

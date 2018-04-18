@@ -17,29 +17,35 @@ public class ApplyResearchServiceImpl implements ApplyResearchService {
     @Autowired
     ApplyResearchMapper applyResearchMapper;
 
+    @Override
     public void insertApplyResearch(ApplyResearchWithBLOBs applyResearch) {
         applyResearchMapper.insertSelective(applyResearch);
     }
 
+    @Override
     public void deleteApplyResearch(int id) {
         applyResearchMapper.deleteByPrimaryKey(Integer.valueOf(id));
     }
 
+    @Override
     public void updateApplyResearch(ApplyResearchWithBLOBs applyResearch) {
         applyResearchMapper.updateByPrimaryKeySelective(applyResearch);
     }
 
+    @Override
     public long getApplyResearchCount(int applyStatus) {
         ApplyResearchExample applyResearchExample = new ApplyResearchExample();
         applyResearchExample.createCriteria().andApplyStatusEqualTo(applyStatus);
         return applyResearchMapper.countByExample(applyResearchExample);
     }
 
+    @Override
     public long getApplyResearchCountAll() {
         ApplyResearchExample applyResearchExample = new ApplyResearchExample();
         return applyResearchMapper.countByExample(applyResearchExample);
     }
 
+    @Override
     public List<ApplyResearch> getApplyResearchByPage(int page, int limit, int applyStatus) {
         ApplyResearchExample applyResearchExample = new ApplyResearchExample();
         applyResearchExample.setOrderByClause("applyDate asc");
@@ -48,6 +54,7 @@ public class ApplyResearchServiceImpl implements ApplyResearchService {
         return applyResearchMapper.selectByExampleWithRowbounds(applyResearchExample, rowBounds);
     }
 
+    @Override
     public List<ApplyResearch> getApplyResearchByPageAll(int page, int limit) {
         ApplyResearchExample applyResearchExample = new ApplyResearchExample();
         applyResearchExample.setOrderByClause("applyDate asc");

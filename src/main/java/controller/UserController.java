@@ -43,6 +43,8 @@ public class UserController {
                         map.put("token", token);
                         if (user1.getUserStatus() == 3) {
                             map.put("admin", true);
+                        }else{
+                            map.put("userType",user1.getUserType());
                         }
                     } else {
                         map.put("code", 4);

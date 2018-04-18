@@ -17,29 +17,35 @@ public class ApplyTopicServiceImpl implements ApplyTopicService {
     @Autowired
     ApplyTopicMapper applyTopicMapper;
 
+    @Override
     public void insertApplyTopic(ApplyTopicWithBLOBs applyTopic) {
         applyTopicMapper.insertSelective(applyTopic);
     }
 
+    @Override
     public void deleteApplyTopic(int id) {
         applyTopicMapper.deleteByPrimaryKey(Integer.valueOf(id));
     }
 
+    @Override
     public void updateApplyTopic(ApplyTopicWithBLOBs applyTopic) {
         applyTopicMapper.updateByPrimaryKeySelective(applyTopic);
     }
 
+    @Override
     public long getApplyTopicCount(int applyStatus) {
         ApplyTopicExample applyTopicExample = new ApplyTopicExample();
         applyTopicExample.createCriteria().andApplyStatusEqualTo(applyStatus);
         return applyTopicMapper.countByExample(applyTopicExample);
     }
 
+    @Override
     public long getApplyTopicCountAll() {
         ApplyTopicExample applyTopicExample = new ApplyTopicExample();
         return applyTopicMapper.countByExample(applyTopicExample);
     }
 
+    @Override
     public List<ApplyTopic> getApplyTopicByPage(int page, int limit, int applyStatus) {
         ApplyTopicExample applyTopicExample = new ApplyTopicExample();
         applyTopicExample.setOrderByClause("applyDate asc");
@@ -48,6 +54,7 @@ public class ApplyTopicServiceImpl implements ApplyTopicService {
         return applyTopicMapper.selectByExampleWithRowbounds(applyTopicExample, rowBounds);
     }
 
+    @Override
     public List<ApplyTopic> getApplyTopicByPageAll(int page, int limit) {
         ApplyTopicExample applyTopicExample = new ApplyTopicExample();
         applyTopicExample.setOrderByClause("applyDate asc");
